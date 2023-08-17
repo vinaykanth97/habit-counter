@@ -4,23 +4,223 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 16px;
 }
 
 a {
   color: inherit;
-  text-decoration: none;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+html {
+  height: 100%;
+}
+
+body {
+  background: url(../images/pattern.jpg);
+  background-size: cover;
+  background-position: bottom;
+  
+  padding: 0 0 30px 0;
+  background-color: #03072a;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 34px;
+}
+
+h3 {
+  font-size: 30px;
+}
+
+h4 {
+  font-size: 28px;
+}
+
+h5 {
+  font-size: 24px;
+}
+
+h6 {
+  font-size: 20px;
+}
+
+.container {
+  max-width: 1140px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.overview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.overview .overview_cards {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(243, 243, 243, 0.7);
+  border-radius: 8px;
+  backdrop-filter: blur(3px);
+  color: #fff;
+}
+
+.overview .overview_cards h5 {
+  margin: 0 0 12px 0;
+  text-transform: capitalize;
+}
+
+.overview .overview_cards h6 {
+  margin: 0 0 6px 0;
+}
+.overview .overview_cards p{
+  margin: 0 0 20px 0;
+}
+.overview .overview_cards a {
+  display: inline-block;
+}
+
+.overview_wrap h1 {
+  color: #fff;
+  text-align: center;
+  margin: 0 0 30px;
+}
+
+.empty-card {
+  text-align: center;
+  color: #fff;
+}
+
+header h1 {
+  color: #fff;
+}
+
+header h1 a {
+  text-decoration: none;
+}
+
+header {
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+
+}
+
+header .header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 0;
+}
+
+button.primary,
+button.secondary {
+  box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(243, 243, 243, 0.7);
+  padding: 10px 20px;
+  transition: 0.3s;
+  color: #fff;
+}
+
+button.primary {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+button.secondary {
+  background: #03072a;
+}
+
+button.primary:hover {
+  background: #fff;
+  color: black;
+}
+
+button.secondary:hover {
+  background: #fff;
+  color: #03072a;
+  border: 1px solid #03072a;
+}
+
+main {
+  padding: 60px 0;
+}
+
+.createhabits {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  max-width: 30%;
+  width: 100%;
+  z-index: 2;
+}
+
+.createhabits .grouped-form {
+  margin: 0 0 14px;
+}
+
+.createhabits label {
+  display: block;
+  margin: 0 0 7px 0;
+}
+
+.createhabits input {
+  width: 100%;
+  padding: 12px;
+}
+
+.createhabits .close {
+  text-align: right;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(3px);
+  z-index: 1;
+}
+
+.d-none {
+  display: none;
+}
+
+.countdown-widget {
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(243, 243, 243, 0.7);
+  backdrop-filter: blur(3px);
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+}
+
+.countdown-widget h2 {
+  margin: 0 0 20px 0;
+}
+.countdown-widget h4{
+  margin: 0 0 20px;
+}
+
+.react-calendar .highlight{
+  background-color: green;
 }
