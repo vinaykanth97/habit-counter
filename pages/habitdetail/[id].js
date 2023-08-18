@@ -14,24 +14,14 @@ export default function Page() {
 
     let dateMethod = requiredData[0]?.habitDate !== undefined ? requiredData[0]?.habitDate : false
     let goal = requiredData[0]?.habitGoal !== undefined ? requiredData[0]?.habitGoal : false
-
-    let endCalc = new Date(new Date(dateMethod).getTime() + (goal * 24 * 60 * 60 * 1000))
-    let endDate = endCalc.getDate()
-    let endDateMonth = endCalc.getMonth()
-    let endDateYear = endCalc.getFullYear()
-    let getEndhour = new Date(dateMethod).getHours(),
-        getEndminute = new Date(dateMethod).getMinutes(),
-        getEndseconds = new Date(dateMethod).getSeconds()
+    let endAt = new Date(new Date(dateMethod).getTime() + (goal * 24 * 60 * 60 * 1000))
     let startFrom = new Date(dateMethod)
-    let endAt = new Date(endDateYear, endDateMonth, endDate, getEndhour, getEndminute, getEndseconds)
 
     return (
         <div className='container'>
-            <CountDownWidget requiredData={requiredData[0]} />
+            <CountDownWidget requiredData={requiredData[0]} endAt={endAt} startFrom={startFrom} habitItems={habitItems}/>
             <Calendar
-                // onChange={onChange}
                 value={[startFrom, endAt > new Date() ? new Date() : endAt]}
-
             />
         </div>
     )
