@@ -3,14 +3,16 @@ import { createWithEqualityFn } from 'zustand/traditional'
 
 export const useStore = create((set) => ({
     habitPopup: false,
-    openHabitPopup: () => {
+    resetPopup: false,
+    openHabitPopup: (whichState) => {
         return set((state) => {
             return ({
-                habitPopup: !state.habitPopup
+                [whichState]: !state[whichState]
             })
-
         })
     },
+    resetFormData: {},
+
     HabitDatas: typeof window !== 'undefined' ? localStorage.getItem('habitRecords') !== null ? JSON.parse(localStorage.getItem('habitRecords')) : [] : '',
     AddHabitDatas: (datas) => {
         return set((state) => {
@@ -25,7 +27,7 @@ export const useHabitStore = createWithEqualityFn(
         updateHabitTitle: (habitTitle) => set((state) => ({ formData: { ...state?.formData, habitTitle: habitTitle } })),
         updateHabitDate: (habitDate) => set((state) => ({ formData: { ...state?.formData, habitDate: habitDate } })),
         updateHabitGoal: (habitGoal) => set((state) => ({ formData: { ...state?.formData, habitGoal: habitGoal } })),
-        
+
     }),
     Object.is
 )

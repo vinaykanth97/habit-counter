@@ -1,48 +1,39 @@
-
+import moment from "moment/moment"
 import { useEffect, useState } from "react"
+import Popup from "./Popup"
+import { useStore } from "../store/CreateStore"
 
 
 
-export default function CountDownWidget({ requiredData, endAt, startFrom, habitItems }) {
+export default function countUpWidget({ requiredData, endAt, startFrom, habitItems }) {
 
-    // How much days left
-    let currentDate = new Date()
-    let endDateToCurrent = new Date(endAt)
-    const inBetweendates = []
+    const resetPopup = useStore((state) => state.resetPopup)
+    const closeCreateHabit = useStore((state) => state.openHabitPopup)
+    const OpenResetAction = useStore((state) => {
+        return state.openHabitPopup
+    })
 
-    function getInbetweenDates(start, end, selectArr) {
-        for (let i = start; start <= end; i++) {
-            selectArr.push(new Date(start));
-            start.setDate(start.getDate() + 1);
-        }
+    // Reset time when click
+    function ResetFormPopup(e) {
+        e.preventDefault()
     }
 
-    getInbetweenDates(currentDate, endDateToCurrent, inBetweendates)
+    // Number of days to go
+    let start = moment(new Date())
+    let end = moment(endAt)
+    let numberOfDaystoGo = Math.abs(Math.floor(moment.duration(start.diff(end)).asDays()));
     let startingTime = new Date(startFrom).getTime()
-
-    const RestHandler = () => {
-        startingTime = new Date().getTime()
-        setStartingDate(startingTime)
-        const dataToStore = Array.from(habitItems).filter(data => {
-            if (requiredData.id === data.id) {
-                const selectedDatetime = new Date();
-                const dateTimeLocalValue = `${selectedDatetime.getFullYear()}-${String(selectedDatetime.getMonth() + 1).padStart(2, "0")
-                    }-${String(selectedDatetime.getDate()).padStart(2, "0")}T${String(selectedDatetime.getHours()).padStart(2, "0")
-                    }:${String(selectedDatetime.getMinutes()).padStart(2, "0")}`;
-                data.habitDate = dateTimeLocalValue
-            }
-            return data
-        })
-
-        localStorage.setItem('habitRecords', JSON.stringify(dataToStore))
-    }
 
     let [startingDate, setStartingDate] = useState()
     let [hms, setHms] = useState();
-    const [countDown, setCountDown] = useState()
+    const [countUp, setCountUp] = useState()
+
+    // Start From Date
     useEffect(() => {
         setStartingDate(startingTime)
     }, [startingTime])
+
+    // To update countUp Hours, Minutes and seconds
     useEffect(() => {
         let newDate = new Date().getTime();
         let finalDate = newDate - startingDate;
@@ -56,26 +47,36 @@ export default function CountDownWidget({ requiredData, endAt, startFrom, habitI
             hours: hours,
             minutes: minutes,
             seconds: seconds,
-            inBetweendates
+            numberOfDaystoGo
         }
         setHms(hms)
-    }, [startFrom, countDown])
+    }, [startFrom, countUp])
 
     useEffect(() => {
         setTimeout(() => {
-            setCountDown(hms)
-            // console.log(hms)
+            setCountUp(hms)
         }, 1000);
-    }, [countDown])
+    }, [countUp])
     return (
-        <div className="countdown-widget">
-            <h4>{countDown?.seconds !== undefined && !isNaN(countDown?.seconds) && (`${countDown?.days} days ${countDown?.hours} Hours ${countDown?.minutes} min ${countDown?.seconds} sec`)}</h4>
-            <div className="display-range">
-                <input type="range" readOnly defaultValue={0} />
-                <span>{countDown?.inBetweendates.length} days left from goal</span>
-            </div>
-            <button onClick={RestHandler} className="secondary">Reset</button>
-        </div>
+        <>
+            <div className="countup-widget">
+                <h4>{countUp?.seconds !== undefined && !isNaN(countUp?.seconds) && (`${countUp?.days} days ${countUp?.hours} Hours ${countUp?.minutes} min ${countUp?.seconds} sec`)}</h4>
+                <div className="display-range">
+                    <input type="range" readOnly defaultValue={0} />
+                    <span>{countUp?.numberOfDaystoGo} days left from goal</span>
+                </div>
+                <button onClick={() => OpenResetAction('resetPopup')} className="secondary">Reset</button>
 
+            </div>
+            <Popup openHabitPopup={resetPopup} closeCreateHabit={() => closeCreateHabit('resetPopup')}>
+                <form onSubmit={ResetFormPopup}>
+                    <div className="grouped-form">
+                        <label htmlFor="habitDate">Specified Date and time you have failed</label>
+                        <input type="datetime-local" name="habitDate" id="habitDate" min={requiredData?.habitDate} max={moment(new Date()).format('YYYY-MM-DDThh:mm')} required />
+                    </div>
+                    <button className="secondary" type="submit">Apply</button>
+                </form>
+            </Popup>
+        </>
     )
 }

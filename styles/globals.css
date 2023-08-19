@@ -204,7 +204,7 @@ main {
   display: none;
 }
 
-.countdown-widget {
+.countup-widget {
   background-color: rgba(255, 255, 255, 0.08);
   box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(243, 243, 243, 0.7);
@@ -214,10 +214,10 @@ main {
   padding: 20px;
 }
 
-.countdown-widget h2 {
+.countup-widget h2 {
   margin: 0 0 20px 0;
 }
-.countdown-widget h4{
+.countup-widget h4{
   margin: 0 0 20px;
 }
 
@@ -227,6 +227,6 @@ main {
 .wrap-details{
   display: flex;
 }
-.wrap-details .countdown-widget{
+.wrap-details .countup-widget{
   flex: 2;
 }
