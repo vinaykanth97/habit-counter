@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react"
 
 
@@ -17,35 +18,11 @@ export default function CountDownWidget({ requiredData, endAt, startFrom, habitI
     }
 
     getInbetweenDates(currentDate, endDateToCurrent, inBetweendates)
-  
-    let [startingDate, setStartingDate] = useState(new Date(startFrom).getTime())
-    let newDate = new Date().getTime();
-
-    let finalDate = newDate - startingDate;
-
-    let days = Math.floor(finalDate / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((finalDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((finalDate % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((finalDate % (1000 * 60)) / 1000);
-
-    let hms = {
-        days: days,
-        hours: hours,
-        minutes: minutes,
-        seconds: seconds
-    }
-
-    const [countDown, setCountDown] = useState({})
-    let countDownTimeout;
-    useEffect(() => {
-        countDownTimeout = setTimeout(() => {
-            setCountDown(hms)
-        }, 1000);
-    }, [countDown])
+    let startingTime = new Date(startFrom).getTime()
 
     const RestHandler = () => {
-        setStartingDate(new Date().getTime())
-
+        startingTime = new Date().getTime()
+        setStartingDate(startingTime)
         const dataToStore = Array.from(habitItems).filter(data => {
             if (requiredData.id === data.id) {
                 const selectedDatetime = new Date();
@@ -59,12 +36,43 @@ export default function CountDownWidget({ requiredData, endAt, startFrom, habitI
 
         localStorage.setItem('habitRecords', JSON.stringify(dataToStore))
     }
+
+    let [startingDate, setStartingDate] = useState()
+    let [hms, setHms] = useState();
+    const [countDown, setCountDown] = useState()
+    useEffect(() => {
+        setStartingDate(startingTime)
+    }, [startingTime])
+    useEffect(() => {
+        let newDate = new Date().getTime();
+        let finalDate = newDate - startingDate;
+        let days = Math.floor(finalDate / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((finalDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((finalDate % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((finalDate % (1000 * 60)) / 1000);
+
+        hms = {
+            days: days,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds,
+            inBetweendates
+        }
+        setHms(hms)
+    }, [startFrom, countDown])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setCountDown(hms)
+            // console.log(hms)
+        }, 1000);
+    }, [countDown])
     return (
         <div className="countdown-widget">
-            <h4>{countDown?.days} days {countDown?.hours} Hours {countDown?.minutes} min {countDown?.seconds} sec</h4>
+            <h4>{countDown?.seconds !== undefined && !isNaN(countDown?.seconds) && (`${countDown?.days} days ${countDown?.hours} Hours ${countDown?.minutes} min ${countDown?.seconds} sec`)}</h4>
             <div className="display-range">
                 <input type="range" readOnly defaultValue={0} />
-                <span>{inBetweendates.length} days left from goal</span>
+                <span>{countDown?.inBetweendates.length} days left from goal</span>
             </div>
             <button onClick={RestHandler} className="secondary">Reset</button>
         </div>

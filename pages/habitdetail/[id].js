@@ -1,10 +1,12 @@
 
-
+import dynamic from "next/dynamic"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import CountDownWidget from '../../components/CountDownWidget';
 import { useStore } from '../../store/CreateStore';
 import { useRouter } from 'next/router'
+
+
 
 export default function Page() {
     const router = useRouter()
@@ -19,10 +21,12 @@ export default function Page() {
 
     return (
         <div className='container'>
-            <CountDownWidget requiredData={requiredData[0]} endAt={endAt} startFrom={startFrom} habitItems={habitItems}/>
-            <Calendar
-                value={[startFrom, endAt > new Date() ? new Date() : endAt]}
-            />
+            <div className="wrap-details">
+                <CountDownWidget requiredData={requiredData[0]} endAt={endAt} startFrom={startFrom} habitItems={habitItems} />
+                <Calendar
+                    value={[startFrom, endAt > new Date() ? new Date() : endAt]}
+                />
+            </div>
         </div>
     )
 }
