@@ -12,6 +12,16 @@ export const useStore = create((set) => ({
         })
     },
     resetFormData: {},
+    resetFormInput: (name, value) => {
+        return set((state) => {
+            return ({
+                resetFormData: {
+                    ...state.resetFormData,
+                    [name]: value
+                }
+            })
+        })
+    },
 
     HabitDatas: typeof window !== 'undefined' ? localStorage.getItem('habitRecords') !== null ? JSON.parse(localStorage.getItem('habitRecords')) : [] : '',
     AddHabitDatas: (datas) => {

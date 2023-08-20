@@ -9,6 +9,8 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
 
     const resetPopup = useStore((state) => state.resetPopup)
     const closeCreateHabit = useStore((state) => state.openHabitPopup)
+    const ResetFormInput = useStore((state) => state.resetFormInput)
+    const ResetFormData = useStore((state) => state.resetFormData)
     const OpenResetAction = useStore((state) => {
         return state.openHabitPopup
     })
@@ -72,9 +74,9 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
                 <form onSubmit={ResetFormPopup}>
                     <div className="grouped-form">
                         <label htmlFor="habitDate">Specified Date and time you have failed</label>
-                        <input type="datetime-local" name="habitDate" id="habitDate" min={requiredData?.habitDate} max={moment(new Date()).format('YYYY-MM-DDThh:mm')} required />
+                        <input type="datetime-local" name="habitDate" id="habitDate" min={requiredData?.habitDate} max={moment(new Date()).format('YYYY-MM-DDThh:mm')} required onChange={(e) => ResetFormInput(e.target.name, e.target.value)} />
                     </div>
-                    <button className="secondary" type="submit">Apply</button>
+                    <button className="secondary" type="submit">Confirm</button>
                 </form>
             </Popup>
         </>
