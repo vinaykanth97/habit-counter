@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createWithEqualityFn } from 'zustand/traditional'
+
 
 export const useStore = create((set) => ({
     habitPopup: false,
@@ -11,6 +11,21 @@ export const useStore = create((set) => ({
             })
         })
     },
+
+    createFormData: {},
+    createFormInput: (name, value) => {
+        return set((state) => {
+            return ({
+                createFormData: {
+                    ...state.createFormData,
+
+                    [name]: value
+                }
+            })
+        })
+    },
+
+
     resetFormData: {},
     resetFormInput: (name, value) => {
         return set((state) => {
@@ -23,21 +38,18 @@ export const useStore = create((set) => ({
         })
     },
 
-    HabitDatas: typeof window !== 'undefined' ? localStorage.getItem('habitRecords') !== null ? JSON.parse(localStorage.getItem('habitRecords')) : [] : '',
+    HabitDatas: typeof window !== 'undefined' ? localStorage.getItem('habitRecords') !== null ? JSON?.parse(localStorage.getItem('habitRecords')) : [] : '',
     AddHabitDatas: (datas) => {
         return set((state) => {
             return ({
                 HabitDatas: [...state?.HabitDatas, datas]
             })
         })
-    }
-}))
-export const useHabitStore = createWithEqualityFn(
-    (set) => ({
-        updateHabitTitle: (habitTitle) => set((state) => ({ formData: { ...state?.formData, habitTitle: habitTitle } })),
-        updateHabitDate: (habitDate) => set((state) => ({ formData: { ...state?.formData, habitDate: habitDate } })),
-        updateHabitGoal: (habitGoal) => set((state) => ({ formData: { ...state?.formData, habitGoal: habitGoal } })),
+    },
 
-    }),
-    Object.is
-)
+    momentUtilities: {
+        currentDateTimeLocal: (prefixer) => prefixer.format(`${prefixer.year()}-${prefixer.month() < 10 ? `0${prefixer.month()}` : ''}-${prefixer.date()}T${prefixer.hour()}:${prefixer.minute() < 10 ? `0${prefixer.minute()}` : prefixer.minute()}`),
+        seconds: (prefixer) => prefixer.seconds(),
+    }
+
+}))

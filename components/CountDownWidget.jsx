@@ -1,11 +1,13 @@
 import moment from "moment/moment"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Popup from "./Popup"
 import { useStore } from "../store/CreateStore"
 
 
 
 export default function countUpWidget({ requiredData, endAt, startFrom, habitItems }) {
+    // Initializing Moment
+    const momentFunc = moment()
 
     const resetPopup = useStore((state) => state.resetPopup)
     const closeCreateHabit = useStore((state) => state.openHabitPopup)
@@ -15,9 +17,21 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
         return state.openHabitPopup
     })
 
+    const getHabitFormData = useStore((state) => state.HabitDatas)
     // Reset time when click
+    const formRef = useRef(null)
     function ResetFormPopup(e) {
         e.preventDefault()
+        closeCreateHabit('resetPopup')
+        formRef.current.reset()
+        // let updatedFormData = getHabitFormData?.map(datas => {
+        //     console.log(datas)
+        //     if (datas?.id === requiredData?.id) {
+        //         datas.habitDate = ResetFormData.resetDate
+        //     }
+        //     return datas
+        // })
+        // console.log(getHabitFormData)
     }
 
     // Number of days to go
@@ -43,12 +57,14 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
         let hours = Math.floor((finalDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let minutes = Math.floor((finalDate % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((finalDate % (1000 * 60)) / 1000);
+        let todayTimeandDate = momentFunc.format(`${momentFunc.year()}-${momentFunc.month()}-${momentFunc.date()}T${momentFunc.hours()}:${momentFunc.minutes()}`)
 
         hms = {
             days: days,
             hours: hours,
             minutes: minutes,
             seconds: seconds,
+            todayTimeandDate,
             numberOfDaystoGo
         }
         setHms(hms)
@@ -62,7 +78,7 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     return (
         <>
             <div className="countup-widget">
-                <h4>{countUp?.seconds !== undefined && !isNaN(countUp?.seconds) && (`${countUp?.days} days ${countUp?.hours} Hours ${countUp?.minutes} min ${countUp?.seconds} sec`)}</h4>
+                {/* <h4>{countUp?.seconds !== undefined && !isNaN(countUp?.seconds) && (`${countUp?.days} days ${countUp?.hours} Hours ${countUp?.minutes} min ${countUp?.seconds} sec`)}</h4> */}
                 <div className="display-range">
                     <input type="range" readOnly defaultValue={0} />
                     <span>{countUp?.numberOfDaystoGo} days left from goal</span>
@@ -71,10 +87,11 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
 
             </div>
             <Popup openHabitPopup={resetPopup} closeCreateHabit={() => closeCreateHabit('resetPopup')}>
-                <form onSubmit={ResetFormPopup}>
+                <form onSubmit={ResetFormPopup} ref={formRef}>
                     <div className="grouped-form">
-                        <label htmlFor="habitDate">Specified Date and time you have failed</label>
-                        <input type="datetime-local" name="habitDate" id="habitDate" min={requiredData?.habitDate} max={moment(new Date()).format('YYYY-MM-DDThh:mm')} required onChange={(e) => ResetFormInput(e.target.name, e.target.value)} />
+                        <label htmlFor="resetDate">Specified Date and time you have failed</label>
+                        <input type="datetime-local" name="resetDate" id="resetDate" min={requiredData?.habitDate} max={countUp?.todayTimeandDate} required onChange={(e) => ResetFormInput(e.target.name, e.target.value)} />
+                       
                     </div>
                     <button className="secondary" type="submit">Confirm</button>
                 </form>
