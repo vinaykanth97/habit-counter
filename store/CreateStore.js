@@ -18,7 +18,6 @@ export const useStore = create((set) => ({
             return ({
                 createFormData: {
                     ...state.createFormData,
-
                     [name]: value
                 }
             })
