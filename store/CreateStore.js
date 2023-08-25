@@ -47,8 +47,19 @@ export const useStore = create((set) => ({
     },
 
     momentUtilities: {
-        currentDateTimeLocal: (prefixer) => prefixer.format(`${prefixer.year()}-${prefixer.month() < 10 ? `0${prefixer.month()}` : ''}-${prefixer.date()}T${prefixer.hour()}:${prefixer.minute() < 10 ? `0${prefixer.minute()}` : prefixer.minute()}`),
+        inbetweenInDays: "",
+        currentDateTimeLocal: (prefixer) => prefixer.format(`${prefixer.year()}-${prefixer.month() + 1 < 10 ? `0${prefixer.month() + 1}` : ''}-${prefixer.date()}T${prefixer.hour() < 10 ? `0${prefixer.hour()}` : prefixer.hour()}:${prefixer.minute() < 10 ? `0${prefixer.minute()}` : prefixer.minute()}`),
         seconds: (prefixer) => prefixer.seconds(),
-    }
+        daysInbetween: (prefixer, startDate, endDate) => {
+            return set((state) => {
+                return ({
+                    momentUtilities: {
+                        ...state.momentUtilities,
+                        inbetweenInDays: Math.abs(Math.trunc(prefixer.duration(prefixer(startDate).diff(endDate)).asDays()))
+                    }
 
+                })
+            })
+        }
+    }
 }))

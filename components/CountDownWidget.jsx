@@ -5,7 +5,7 @@ import { useStore } from "../store/CreateStore"
 
 
 
-export default function countUpWidget({ requiredData, endAt, startFrom, habitItems }) {
+export default function countUpWidget({ requiredData, endAt, startFrom, habitItems, inbetweenDays }) {
     // Initializing Moment
     const momentFunc = moment()
 
@@ -13,6 +13,8 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     const closeCreateHabit = useStore((state) => state.openHabitPopup)
     const ResetFormInput = useStore((state) => state.resetFormInput)
     const ResetFormData = useStore((state) => state.resetFormData)
+    const momentLocalDateTime = useStore((state) => state.momentUtilities.currentDateTimeLocal)
+
     const OpenResetAction = useStore((state) => {
         return state.openHabitPopup
     })
@@ -23,6 +25,8 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     function ResetFormPopup(e) {
         e.preventDefault()
         closeCreateHabit('resetPopup')
+        
+        setStartingDate(new Date(ResetFormData.resetDate))
         formRef.current.reset()
         // let updatedFormData = getHabitFormData?.map(datas => {
         //     console.log(datas)
@@ -43,10 +47,11 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     let [startingDate, setStartingDate] = useState()
     let [hms, setHms] = useState();
     const [countUp, setCountUp] = useState()
-
+    let currentLocalDateTime = momentLocalDateTime(moment())
     // Start From Date
     useEffect(() => {
         setStartingDate(startingTime)
+
     }, [startingTime])
 
     // To update countUp Hours, Minutes and seconds
@@ -57,14 +62,14 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
         let hours = Math.floor((finalDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let minutes = Math.floor((finalDate % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((finalDate % (1000 * 60)) / 1000);
-        let todayTimeandDate = momentFunc.format(`${momentFunc.year()}-${momentFunc.month()}-${momentFunc.date()}T${momentFunc.hours()}:${momentFunc.minutes()}`)
+
 
         hms = {
             days: days,
             hours: hours,
             minutes: minutes,
             seconds: seconds,
-            todayTimeandDate,
+            currentLocalDateTime,
             numberOfDaystoGo
         }
         setHms(hms)
@@ -78,7 +83,7 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     return (
         <>
             <div className="countup-widget">
-                {/* <h4>{countUp?.seconds !== undefined && !isNaN(countUp?.seconds) && (`${countUp?.days} days ${countUp?.hours} Hours ${countUp?.minutes} min ${countUp?.seconds} sec`)}</h4> */}
+                <h4>{countUp?.seconds !== undefined && !isNaN(countUp?.seconds) && (`${countUp?.days} days ${countUp?.hours} Hours ${countUp?.minutes} min ${countUp?.seconds} sec`)}</h4>
                 <div className="display-range">
                     <input type="range" readOnly defaultValue={0} />
                     <span>{countUp?.numberOfDaystoGo} days left from goal</span>
@@ -90,8 +95,8 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
                 <form onSubmit={ResetFormPopup} ref={formRef}>
                     <div className="grouped-form">
                         <label htmlFor="resetDate">Specified Date and time you have failed</label>
-                        <input type="datetime-local" name="resetDate" id="resetDate" min={requiredData?.habitDate} max={countUp?.todayTimeandDate} required onChange={(e) => ResetFormInput(e.target.name, e.target.value)} />
-                       
+                        <input type="datetime-local" name="resetDate" id="resetDate" min={requiredData?.habitDate} max={countUp?.currentLocalDateTime} required onChange={(e) => ResetFormInput(e.target.name, e.target.value)} />
+
                     </div>
                     <button className="secondary" type="submit">Confirm</button>
                 </form>
