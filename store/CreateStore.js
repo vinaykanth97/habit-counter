@@ -45,10 +45,18 @@ export const useStore = create((set) => ({
             })
         })
     },
+    successHabit: false,
+    addSuccessHabit: (successHighlight) => {
+        return set(() => {
+            return ({
+                successHabit: successHighlight
+            })
+        })
+    },
 
     momentUtilities: {
         inbetweenInDays: "",
-        currentDateTimeLocal: (prefixer) => prefixer.format(`${prefixer.year()}-${prefixer.month() + 1 < 10 ? `0${prefixer.month() + 1}` : ''}-${prefixer.date()}T${prefixer.hour() < 10 ? `0${prefixer.hour()}` : prefixer.hour()}:${prefixer.minute() < 10 ? `0${prefixer.minute()}` : prefixer.minute()}`),
+        currentDateTimeLocal: (prefixer) => prefixer.format(`${prefixer.year()}-${prefixer.month() < 10 ? `0${prefixer.month()}` : prefixer.month()}-${prefixer.date() < 10 ? `0${prefixer.date()}` : prefixer.date()}T${prefixer.hour() < 10 ? `0${prefixer.hour()}` : prefixer.hour()}:${prefixer.minute() < 10 ? `0${prefixer.minute()}` : prefixer.minute()}`),
         seconds: (prefixer) => prefixer.seconds(),
         daysInbetween: (prefixer, startDate, endDate) => {
             return set((state) => {

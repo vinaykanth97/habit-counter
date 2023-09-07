@@ -3,13 +3,15 @@ import { useStore } from "../store/CreateStore"
 import moment from "moment"
 
 export default function OverviewCards() {
-    let tsMoment = moment()
     const componentRequiredStates = useStore((state => {
         return {
             habitItems: state?.HabitDatas,
+            numberOfDaysInbetween: state.momentUtilities.daysInbetween,
+            inbetweenCount: state.momentUtilities.inbetweenInDays
         }
     }))
     let { habitItems } = componentRequiredStates
+
     return (
         <div className="overview_wrap">
             <div className="container">
@@ -21,7 +23,7 @@ export default function OverviewCards() {
                                 <div className="overview_cards" suppressHydrationWarning={true} key={i}>
                                     <h5>{card.habitTitle}</h5>
                                     <h6>Started On: {moment(card.habitDate).format('DD-MM-yyyy')}</h6>
-                                    <p>Goal: {Math.abs(Math.floor(moment.duration(moment(card.habitDate).diff(card.habitUntil)).asDays()))} days</p>
+                                    <p>Goal: {card.goal} days</p>
                                     <Link href={`/habitdetail/${card.id}`}>Check your Stats</Link>
                                 </div>
                             )

@@ -25,7 +25,7 @@ body {
   background: url(../images/pattern.jpg);
   background-size: cover;
   background-position: bottom;
-  
+
   padding: 0 0 30px 0;
   background-color: #03072a;
 }
@@ -85,9 +85,11 @@ h6 {
 .overview .overview_cards h6 {
   margin: 0 0 6px 0;
 }
-.overview .overview_cards p{
+
+.overview .overview_cards p {
   margin: 0 0 20px 0;
 }
+
 .overview .overview_cards a {
   display: inline-block;
 }
@@ -217,19 +219,45 @@ main {
 .countup-widget h2 {
   margin: 0 0 20px 0;
 }
-.countup-widget h4{
+
+.countup-widget h4 {
   margin: 0 0 20px;
 }
 
-.react-calendar .highlight{
+.react-calendar .highlight {
   background-color: green;
 }
-.wrap-details{
+
+.wrap-details {
   display: flex;
 }
-.wrap-details .countup-widget{
+
+.wrap-details .countup-widget {
   flex: 2;
 }
+
 /* .react-calendar .react-calendar__tile--now{
   background: green;
 } */
+.display-range {
+  background: #fff;
+  max-width: 40%;
+  width: 100%;
+  margin: 0 auto 20px auto;
+  padding: 10px;
+  position: relative;
+}
+
+.display-range .counts {
+  color: #03072a;
+  font-weight: bold;
+}
+
+.display-range span {
+  width: 50%;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 0;
+  background-color: #050931a1;
+}
