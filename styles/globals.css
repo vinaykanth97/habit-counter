@@ -259,5 +259,11 @@ main {
   top: 0;
   height: 100%;
   left: 0;
-  background-color: #050931a1;
+
+}
+.habit-status{
+  margin: 0 0 20px 0;
+}
+.habit-status span{
+  text-transform: capitalize;
 }

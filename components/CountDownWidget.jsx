@@ -57,13 +57,21 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     let startingTime = new Date(startFrom).getTime()
 
     let [startingDate, setStartingDate] = useState()
-    let [hms, setHms] = useState();
+    let [hms, setHms] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        currentLocalDateTime: 0,
+        numberOfDaystoGo: 0
+    });
     const [countUp, setCountUp] = useState()
 
     // Start From Date
     useEffect(() => {
         setStartingDate(startingTime)
         ResetFormInput("resetDate", currentLocalDateTime)
+        setHms(hms)
     }, [startingTime])
 
     // To update countUp Hours, Minutes and seconds
@@ -76,7 +84,10 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
         let seconds = Math.floor((finalDate % (1000 * 60)) / 1000);
         addSuccess(moment(requiredData?.habitUntil).isSame(moment(), 'day'))
 
-
+        if (currentLocalDateTime >= endAt) {
+            addSuccess(true)
+        }
+        console.log(numberOfDaystoGo)
         hms = {
             days: days,
             hours: hours,
@@ -91,6 +102,10 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
     useEffect(() => {
         setTimeout(() => {
             setCountUp(hms)
+            if (currentLocalDateTime >= endAt) {
+                addSuccess(true)
+                hms.numberOfDaystoGo = 0
+            }
         }, 1000);
     }, [countUp])
     return (
@@ -101,7 +116,7 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
                     <div className="counts">{countUp?.numberOfDaystoGo} days left from goal</div>
                     <span></span>
                 </div>
-                <p>success:{successHabit.toString()}</p>
+                <p className="habit-status">Habit Succeeded: <span>{successHabit.toString()}</span></p>
                 <button onClick={() => OpenResetAction('resetPopup')} className="secondary">Reset</button>
 
             </div>
@@ -110,7 +125,6 @@ export default function countUpWidget({ requiredData, endAt, startFrom, habitIte
                     <div className="grouped-form">
                         <label htmlFor="resetDate">Specified Date and time you have failed</label>
                         <input type="datetime-local" name="resetDate" id="resetDate" min={requiredData?.habitDate} max={countUp?.currentLocalDateTime} defaultValue={countUp?.currentLocalDateTime} required onChange={(e) => ResetFormInput(e.target.name, e.target.value)} />
-
                     </div>
                     <button className="secondary" type="submit">Confirm</button>
                 </form>
